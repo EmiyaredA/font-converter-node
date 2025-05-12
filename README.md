@@ -48,6 +48,10 @@ node index.js -p path/to/presentation.pptx -o output
 ppt-font-converter -p path/to/presentation.pptx -o output
 ```
 
+```bash
+node index.js --pptx path/to/presentation.pptx
+```
+
 ### 命令行参数
 
 ```
