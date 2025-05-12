@@ -1,0 +1,32 @@
+{
+  "name": "font-converter-node",
+  "version": "1.0.0",
+  "description": "将PPT中的EOT(fntdata)字体文件转换为TTF格式",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "convert": "node index.js"
+  },
+  "keywords": [
+    "font",
+    "converter",
+    "eot",
+    "ttf",
+    "woff2",
+    "ppt",
+    "fntdata"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.5.10",
+    "commander": "^11.1.0",
+    "fast-xml-parser": "^5.2.2",
+    "form-data": "^4.0.2",
+    "fs-extra": "^11.2.0",
+    "node-fetch": "^3.3.2",
+    "ttf2woff2": "^6.0.1"
+  },
+  "packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
+}
