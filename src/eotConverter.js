@@ -233,4 +233,89 @@ export function hasValidTTFHeader(ttfData) {
          (ttfData[0] === 0x4F && ttfData[1] === 0x54 && ttfData[2] === 0x54 && ttfData[3] === 0x4F) || // OpenType/CFF ('OTTO')
          (ttfData[0] === 0x74 && ttfData[1] === 0x72 && ttfData[2] === 0x75 && ttfData[3] === 0x65) || // TrueType (Apple) ('true')
          (ttfData[0] === 0x74 && ttfData[1] === 0x79 && ttfData[2] === 0x70 && ttfData[3] === 0x31);   // Type 1 ('typ1')
+}
+
+/**
+ * 将TTF格式字体转换为EOT格式
+ * @param {string} ttfFilePath TTF文件路径
+ * @param {string} eotOutputPath 输出的EOT文件路径
+ * @returns {Promise<boolean>} 是否转换成功
+ */
+export async function convertTTFtoEOT(ttfFilePath, eotOutputPath) {
+  try {
+    console.log(`开始将TTF字体文件转换为EOT格式: ${ttfFilePath}`);
+    
+    // 读取TTF文件
+    const ttfData = await fs.readFile(ttfFilePath);
+    
+    // 检查TTF文件有效性
+    if (!hasValidTTFHeader(ttfData)) {
+      console.error('提供的文件不是有效的TTF字体文件');
+      return false;
+    }
+    
+    // 构建EOT头部和元数据
+    const eotData = createEOTFromTTF(ttfData);
+    
+    if (!eotData || eotData.length === 0) {
+      console.error('无法创建EOT格式数据');
+      return false;
+    }
+    
+    // 确保输出目录存在
+    await fs.ensureDir(path.dirname(eotOutputPath));
+    
+    // 保存EOT文件
+    await fs.writeFile(eotOutputPath, eotData);
+    
+    console.log(`成功将TTF字体转换为EOT格式，保存到: ${eotOutputPath}`);
+    return true;
+  } catch (error) {
+    console.error(`转换字体文件时发生错误: ${error.message}`);
+    return false;
+  }
+}
+
+/**
+ * 从TTF数据创建EOT格式的数据
+ * @param {Buffer} ttfData TTF文件的字节数据
+ * @returns {Buffer|null} EOT格式的字体数据
+ */
+function createEOTFromTTF(ttfData) {
+  try {
+    // EOT文件的基本结构
+    // 1. EOT头部 (固定大小，包含元数据)
+    // 2. 字体数据 (TTF/OTF)
+    
+    // 创建基本EOT头部
+    const eotHeaderSize = EOT_HEADER_SIZE;
+    const eotHeader = Buffer.alloc(eotHeaderSize, 0);
+    
+    // EOT签名 (0x504C)
+    eotHeader.writeUInt16LE(0x504C, 0);
+    
+    // EOT版本 (通常为0x0002)
+    eotHeader.writeUInt16LE(0x0002, 2);
+    
+    // 填充一些必要的EOT头部字段
+    // 注意：这是一个简化实现，完整的EOT头部需要更多字段
+    
+    // 字体大小
+    eotHeader.writeUInt32LE(ttfData.length, 4);
+    
+    // 字体标志位
+    eotHeader.writeUInt32LE(0, 8);
+    
+    // 填充剩余头部数据
+    // ...
+    
+    // 合并EOT头部和TTF数据
+    const eotData = Buffer.concat([eotHeader, ttfData]);
+    
+    console.log(`创建了EOT数据，总大小: ${eotData.length}字节`);
+    return eotData;
+  } catch (error) {
+    console.error(`创建EOT数据时发生错误: ${error.message}`);
+    return null;
+  }
 } 

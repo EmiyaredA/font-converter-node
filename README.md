@@ -7,6 +7,7 @@
 - 从PPTX文件中提取嵌入的字体文件
 - 将EOT (Embedded OpenType) 格式的.fntdata文件转换为TTF格式
 - 支持单个字体文件的直接转换
+- 支持批量处理文件夹中的多个PPTX或字体文件
 - 提供命令行界面和Node.js API
 
 ## 环境要求
@@ -48,19 +49,26 @@ node index.js -p path/to/presentation.pptx -o output
 ppt-font-converter -p path/to/presentation.pptx -o output
 ```
 
+处理包含多个PPTX或字体文件的文件夹：
+
 ```bash
-node index.js --pptx path/to/presentation.pptx
+# 本地运行
+node index.js -d path/to/folder -o output
+
+# 全局安装后运行
+ppt-font-converter -d path/to/folder -o output
 ```
 
 ### 命令行参数
 
 ```
 选项:
-  -V, --version      显示版本号
-  -p, --pptx <file>  PPTX文件路径
-  -f, --font <file>  单个字体文件路径
-  -o, --output <dir> 输出目录 (默认: "output")
-  -h, --help         显示帮助信息
+  -V, --version            显示版本号
+  -p, --pptx <file>        PPTX文件路径
+  -f, --font <file>        单个字体文件路径
+  -d, --dir <directory>    包含PPTX或字体文件的文件夹路径
+  -o, --output <dir>       输出目录 (默认: "output")
+  -h, --help               显示帮助信息
 ```
 
 ### 在Node.js项目中使用
